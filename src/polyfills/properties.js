@@ -1,4 +1,3 @@
-'use strict';
 
 
 import install_property from '../tools/property_installer';

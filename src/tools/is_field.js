@@ -1,5 +1,3 @@
-'use strict';
-
 export default function(element) {
   return (
           element instanceof window.HTMLButtonElement ||
@@ -14,4 +12,3 @@ export default function(element) {
           element === window.HTMLFieldSetElement.prototype
          );
 }
-

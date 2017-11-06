@@ -1,4 +1,3 @@
-'use strict';
 
 
 import is_validation_candidate from '../tools/is_validation_candidate';

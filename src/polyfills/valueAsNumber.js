@@ -1,4 +1,3 @@
-'use strict';
 
 
 import get_type from '../tools/get_type';

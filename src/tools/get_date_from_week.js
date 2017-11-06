@@ -1,6 +1,3 @@
-'use strict';
-
-
 /**
  * return a new Date() representing the ISO date for a week number
  *

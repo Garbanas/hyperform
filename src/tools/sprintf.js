@@ -1,6 +1,3 @@
-'use strict';
-
-
 export default function(str, ...args) {
   const args_length = args.length;
   var global_index = 0;

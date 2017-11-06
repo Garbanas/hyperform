@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * mark an object with a '__hyperform=true' property
  *

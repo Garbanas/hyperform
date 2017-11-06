@@ -1,6 +1,3 @@
-'use strict';
-
-
 import get_date_from_week from './get_date_from_week';
 
 

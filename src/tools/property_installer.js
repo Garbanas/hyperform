@@ -1,6 +1,3 @@
-'use strict';
-
-
 import { get_wrapper } from '../components/wrapper';
 
 

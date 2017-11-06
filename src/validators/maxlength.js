@@ -1,6 +1,3 @@
-'use strict';
-
-
 import get_type from '../tools/get_type';
 import is_validation_candidate from '../tools/is_validation_candidate';
 import unicode_string_length from '../tools/unicode_string_length';

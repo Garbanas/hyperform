@@ -1,4 +1,3 @@
-'use strict';
 
 
 import { get_wrapper } from './wrapper';

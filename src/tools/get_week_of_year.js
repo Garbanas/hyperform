@@ -1,6 +1,3 @@
-'use strict';
-
-
 /* For a given date, get the ISO week number
  *
  * Source: http://stackoverflow.com/a/6117889/113195

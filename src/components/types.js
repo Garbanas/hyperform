@@ -1,4 +1,3 @@
-'use strict';
 
 /* and datetime-local? Spec says “Nah!” */
 export const dates = [ 'datetime', 'date', 'month', 'week', 'time', ];

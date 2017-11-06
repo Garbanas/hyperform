@@ -1,4 +1,3 @@
-'use strict';
 
 
 import { catch_submit, uncatch_submit } from '../tools/catch_submit';

@@ -1,5 +1,3 @@
-'use strict';
-
 /* shim layer for the Element.matches method */
 
 const ep = window.Element.prototype;

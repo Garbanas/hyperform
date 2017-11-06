@@ -1,6 +1,3 @@
-'use strict';
-
-
 import get_type from '../tools/get_type';
 import is_validation_candidate from '../tools/is_validation_candidate';
 import string_to_date from '../tools/string_to_date';

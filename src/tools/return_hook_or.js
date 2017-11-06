@@ -1,6 +1,3 @@
-'use strict';
-
-
 import { call_hook } from '../components/hooks.js';
 
 

@@ -1,6 +1,3 @@
-'use strict';
-
-
 /**
  * patch String.length to account for non-BMP characters
  *

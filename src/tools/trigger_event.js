@@ -1,5 +1,3 @@
-'use strict';
-
 /* the following code is borrowed from the WebComponents project, licensed
  * under the BSD license. Source:
  * <https://github.com/webcomponents/webcomponentsjs/blob/5283db1459fa2323e5bfc8b9b5cc1753ed85e3d0/src/WebComponents/dom.js#L53-L78>

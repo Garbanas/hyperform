@@ -1,4 +1,3 @@
-'use strict';
 
 
 import checkValidity from './polyfills/checkValidity';

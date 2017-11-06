@@ -1,4 +1,3 @@
-'use strict';
 
 
 import return_hook_or from '../tools/return_hook_or';

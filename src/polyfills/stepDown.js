@@ -1,4 +1,3 @@
-'use strict';
 
 
 import get_next_valid from '../tools/get_next_valid';

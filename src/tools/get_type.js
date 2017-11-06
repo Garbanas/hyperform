@@ -1,6 +1,3 @@
-'use strict';
-
-
 import { inputs } from '../components/types';
 
 

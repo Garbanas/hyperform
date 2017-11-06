@@ -1,6 +1,3 @@
-'use strict';
-
-
 import { do_filter } from '../components/hooks';
 import { validation_candidates, non_inputs } from '../components/types';
 import { get_wrapper } from '../components/wrapper';

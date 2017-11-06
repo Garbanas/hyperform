@@ -1,4 +1,3 @@
-'use strict';
 
 
 const internal_registry = new WeakMap();

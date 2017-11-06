@@ -1,4 +1,3 @@
-'use strict';
 
 
 import trigger_event from '../tools/trigger_event';

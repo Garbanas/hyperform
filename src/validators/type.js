@@ -1,6 +1,3 @@
-'use strict';
-
-
 import comma_split from '../tools/comma_split';
 import get_type from '../tools/get_type';
 import is_validation_candidate from '../tools/is_validation_candidate';

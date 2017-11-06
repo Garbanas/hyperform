@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Implement constraint checking functionality defined in the HTML5 standard
  *

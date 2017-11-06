@@ -1,4 +1,3 @@
-'use strict';
 
 
 import trigger_event, { create_event } from './trigger_event';

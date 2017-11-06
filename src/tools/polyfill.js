@@ -1,6 +1,3 @@
-'use strict';
-
-
 import install_property from './property_installer';
 import is_field from './is_field';
 import mark from './mark';

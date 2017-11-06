@@ -1,4 +1,3 @@
-'use strict';
 
 
 import message_store from './message_store';

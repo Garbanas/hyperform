@@ -1,4 +1,3 @@
-'use strict';
 
 
 export const default_step = {

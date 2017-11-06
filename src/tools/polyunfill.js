@@ -1,6 +1,3 @@
-'use strict';
-
-
 import is_field from './is_field';
 import uninstall_property from './property_uninstaller';
 import { uninstall_properties } from '../polyfills/properties';

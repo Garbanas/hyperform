@@ -1,6 +1,3 @@
-'use strict';
-
-
 import string_to_date from './string_to_date';
 
 

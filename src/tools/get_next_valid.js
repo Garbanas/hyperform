@@ -1,6 +1,3 @@
-'use strict';
-
-
 import date_to_string from './date_to_string';
 import string_to_number from './string_to_number';
 import get_type from './get_type';

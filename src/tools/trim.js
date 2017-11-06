@@ -1,6 +1,3 @@
-'use strict';
-
-
 const ws_on_start_or_end = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 
