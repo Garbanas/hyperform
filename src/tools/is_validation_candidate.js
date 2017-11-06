@@ -39,10 +39,10 @@ export default function(element) {
         const wrapped_form = get_wrapper(element);
         /* the parent form doesn't allow non-standard "novalidate" attributes
          * or it doesn't have such an attribute/property */
-        if ((wrapped_form && ! wrapped_form.settings.novalidateOnElements) ||
-            ! element.hasAttribute('novalidate') ||
-            ! element.noValidate) {
-
+        if (
+          (wrapped_form && !wrapped_form.settings.novalidateOnElements) ||
+          (!element.hasAttribute('novalidate') && !element.noValidate)
+        ) {
           /* it isn't part of a <fieldset disabled> */
           let p = element.parentNode;
           while (p && p.nodeType === 1) {

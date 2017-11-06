@@ -1,5 +1,3 @@
-
-
 import checkValidity from './polyfills/checkValidity';
 import reportValidity from './polyfills/reportValidity';
 import setCustomValidity from './polyfills/setCustomValidity';
