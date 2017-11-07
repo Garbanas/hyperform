@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
 import min from '../../../src/validators/min';
 
-test('validator-min', t => {
-  var el = document.createElement('input');
+test('validator-min', (t) => {
+  const el = document.createElement('input');
   el.type = 'number';
   el.setAttribute('min', '10');
   el.value = '';
@@ -21,8 +19,8 @@ test('validator-min', t => {
   t.is(min(el), true);
 });
 
-test('validator-min for date', t => {
-  var el = document.createElement('input');
+test('validator-min for date', (t) => {
+  const el = document.createElement('input');
   el.type = 'date';
   el.setAttribute('min', '2015-01-01');
   el.value = '';

@@ -1,23 +1,19 @@
-import get_type from '../tools/get_type';
-import is_validation_candidate from '../tools/is_validation_candidate';
-import unicode_string_length from '../tools/unicode_string_length';
-import { text as text_types } from '../components/types';
+import getType from '../tools/getType';
+import isValidationCandidate from '../tools/isValidationCandidate';
+import unicodeStringLength from '../tools/unicodeStringLength';
+import { text as textTypes } from '../components/types';
 
 
 /**
  * test the minlength attribute
  */
-export default function(element) {
+export default function (element) {
   if (
-      ! is_validation_candidate(element)
-      ||
-      ! element.value
-      ||
-      text_types.indexOf(get_type(element)) === -1
-      ||
-      ! element.hasAttribute('minlength')
-      ||
-      ! element.getAttribute('minlength') // catch minlength=""
+    !isValidationCandidate(element) ||
+    !element.value ||
+    textTypes.indexOf(getType(element)) === -1 ||
+    !element.hasAttribute('minlength') ||
+    !element.getAttribute('minlength') // catch minlength=""
   ) {
     return true;
   }
@@ -25,9 +21,9 @@ export default function(element) {
   const minlength = parseInt(element.getAttribute('minlength'), 10);
 
   /* check, if the minlength value is usable at all. */
-  if (isNaN(minlength) || minlength < 0) {
+  if (Number.isNaN(minlength) || minlength < 0) {
     return true;
   }
 
-  return unicode_string_length(element.value) >= minlength;
+  return unicodeStringLength(element.value) >= minlength;
 }

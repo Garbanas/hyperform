@@ -699,7 +699,7 @@ define(function () { 'use strict';
                        }
 
                        /**
-                        * decommission the event listeners from catch_submit() again
+                        * decommission the event listeners from catchSubmit() again
                         */
                        function uncatch_submit(listening_node) {
                          listening_node.removeEventListener('click', ignored_click_handler);

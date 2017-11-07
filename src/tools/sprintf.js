@@ -1,17 +1,17 @@
-export default function(str, ...args) {
-  const args_length = args.length;
-  var global_index = 0;
+export default function (str, ...args) {
+  const argsLength = args.length;
+  let globalIndex = 0;
 
   return str.replace(/%([0-9]+\$)?([sl])/g, (match, position, type) => {
-    var local_index = global_index;
+    let localIndex = globalIndex;
     if (position) {
-      local_index = Number(position.replace(/\$$/, '')) - 1;
+      localIndex = Number(position.replace(/\$$/, '')) - 1;
     }
-    global_index += 1;
+    globalIndex += 1;
 
-    var arg = '';
-    if (args_length > local_index) {
-      arg = args[local_index];
+    let arg = '';
+    if (argsLength > localIndex) {
+      arg = args[localIndex];
     }
 
     if (arg instanceof Date ||

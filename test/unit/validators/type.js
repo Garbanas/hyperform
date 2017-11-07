@@ -1,17 +1,15 @@
-'use strict';
-
 import test from 'ava';
 import type from '../../../src/validators/type';
 
-test('validator-type others', t => {
-  var el = document.createElement('input');
+test('validator-type others', (t) => {
+  const el = document.createElement('input');
   el.setAttribute('type', 'number');
   el.value = '10';
   t.is(type(el), true);
 });
 
-test('validator-type url', t => {
-  var el = document.createElement('input');
+test('validator-type url', (t) => {
+  const el = document.createElement('input');
   el.setAttribute('type', 'url');
   el.value = 'foo';
   t.is(type(el), false);
@@ -26,8 +24,8 @@ test('validator-type url', t => {
   t.is(type(el), true);
 });
 
-test('validator-type email', t => {
-  var el = document.createElement('input');
+test('validator-type email', (t) => {
+  const el = document.createElement('input');
   el.setAttribute('type', 'email');
   el.value = 'info@example.com';
   t.is(type(el), true);
@@ -42,8 +40,8 @@ test('validator-type email', t => {
   t.is(type(el), true);
 });
 
-test('validator-type file', t => {
-  var el = document.createElement('input');
+test('validator-type file', (t) => {
+  const el = document.createElement('input');
   el.setAttribute('type', 'file');
   el.value = '';
   t.is(type(el), true);
@@ -61,7 +59,7 @@ test('validator-type file', t => {
     value: [{
       type: 'video/mp4',
       name: 'funny.cat.video.mp4',
-    },],
+    }],
     writable: true,
   });
   t.is(type(el), false);

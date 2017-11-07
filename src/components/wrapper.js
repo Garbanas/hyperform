@@ -1,9 +1,7 @@
-
-
-import { catch_submit, uncatch_submit } from '../tools/catch_submit';
+import { catchSubmit, uncatchSubmit } from '../tools/catchSubmit';
 import ValidityState from '../polyfills/validityState';
 import reportValidity from '../polyfills/reportValidity';
-import uninstall from '../tools/property_uninstaller';
+import uninstall from '../tools/propertyUninstaller';
 import polyfill from '../tools/polyfill';
 import polyunfill from '../tools/polyunfill';
 
@@ -16,10 +14,9 @@ const instances = new WeakMap();
  * hyperform()
  */
 export default function Wrapper(form, settings) {
-
   /* do not allow more than one instance per form. Otherwise we'd end
    * up with double event handlers, polyfills re-applied, ... */
-  var existing = instances.get(form);
+  const existing = instances.get(form);
   if (existing) {
     existing.settings = settings;
     return existing;
@@ -31,7 +28,7 @@ export default function Wrapper(form, settings) {
 
   instances.set(form, this);
 
-  catch_submit(form, settings.revalidate === 'never');
+  catchSubmit(form, settings.revalidate === 'never');
 
   if (form === window || form.nodeType === 9) {
     /* install on the prototypes, when called for the whole document */
@@ -43,8 +40,10 @@ export default function Wrapper(form, settings) {
       window.HTMLFieldSetElement.prototype,
     ]);
     polyfill(window.HTMLFormElement);
-  } else if (form instanceof window.HTMLFormElement ||
-             form instanceof window.HTMLFieldSetElement) {
+  } else if (
+    form instanceof window.HTMLFormElement ||
+    form instanceof window.HTMLFieldSetElement
+  ) {
     this.install(form.elements);
     if (form instanceof window.HTMLFormElement) {
       polyfill(form);
@@ -69,11 +68,12 @@ export default function Wrapper(form, settings) {
 Wrapper.prototype = {
 
   destroy() {
-    uncatch_submit(this.form);
+    uncatchSubmit(this.form);
     instances.delete(this.form);
     this.form.removeEventListener('keyup', this.revalidator);
     this.form.removeEventListener('change', this.revalidator);
     this.form.removeEventListener('blur', this.revalidator, true);
+
     if (this.form === window || this.form.nodeType === 9) {
       this.uninstall([
         window.HTMLButtonElement.prototype,
@@ -83,8 +83,10 @@ Wrapper.prototype = {
         window.HTMLFieldSetElement.prototype,
       ]);
       polyunfill(window.HTMLFormElement);
-    } else if (this.form instanceof window.HTMLFormElement ||
-               this.form instanceof window.HTMLFieldSetElement) {
+    } else if (
+      this.form instanceof window.HTMLFormElement ||
+      this.form instanceof window.HTMLFieldSetElement
+    ) {
       this.uninstall(this.form.elements);
       if (this.form instanceof window.HTMLFormElement) {
         polyunfill(this.form);
@@ -96,18 +98,20 @@ Wrapper.prototype = {
    * revalidate an input element
    */
   revalidate(event) {
-    if (event.target instanceof window.HTMLButtonElement ||
-        event.target instanceof window.HTMLTextAreaElement ||
-        event.target instanceof window.HTMLSelectElement ||
-        event.target instanceof window.HTMLInputElement) {
-
+    if (
+      event.target instanceof window.HTMLButtonElement ||
+      event.target instanceof window.HTMLTextAreaElement ||
+      event.target instanceof window.HTMLSelectElement ||
+      event.target instanceof window.HTMLInputElement
+    ) {
       if (this.settings.revalidate === 'hybrid') {
         /* "hybrid" somewhat simulates what browsers do. See for example
          * Firefox's :-moz-ui-invalid pseudo-class:
          * https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-ui-invalid */
-        if (event.type === 'blur' &&
-            event.target.value !== event.target.defaultValue ||
-            ValidityState(event.target).valid) {
+        if (
+          (event.type === 'blur' && event.target.value !== event.target.defaultValue) ||
+          ValidityState(event.target).valid
+        ) {
           /* on blur, update the report when the value has changed from the
            * default or when the element is valid (possibly removing a still
            * standing invalidity report). */
@@ -119,11 +123,9 @@ Wrapper.prototype = {
             reportValidity(event.target);
           }
         }
-
       } else {
         reportValidity(event.target);
       }
-
     }
   },
 
@@ -141,24 +143,24 @@ Wrapper.prototype = {
    */
   install(els) {
     if (els instanceof window.Element) {
-      els = [ els ];
+      els = [els];
     }
 
-    const els_length = els.length;
+    const elsLength = els.length;
 
-    for (let i = 0; i < els_length; i++) {
+    for (let i = 0; i < elsLength; i++) {
       polyfill(els[i]);
     }
   },
 
   uninstall(els) {
     if (els instanceof window.Element) {
-      els = [ els ];
+      els = [els];
     }
 
-    const els_length = els.length;
+    const elsLength = els.length;
 
-    for (let i = 0; i < els_length; i++) {
+    for (let i = 0; i < elsLength; i++) {
       polyunfill(els[i]);
     }
   },
@@ -172,8 +174,8 @@ Wrapper.prototype = {
  *
  * @return Wrapper | undefined
  */
-export function get_wrapper(element) {
-  var wrapped;
+export function getWrapper(element) {
+  let wrapped;
 
   if (element.form) {
     /* try a shortcut with the element's <form> */
@@ -181,12 +183,12 @@ export function get_wrapper(element) {
   }
 
   /* walk up the parent nodes until document (including) */
-  while (! wrapped && element) {
+  while (!wrapped && element) {
     wrapped = instances.get(element);
     element = element.parentNode;
   }
 
-  if (! wrapped) {
+  if (!wrapped) {
     /* try the global instance, if exists. This may also be undefined. */
     wrapped = instances.get(window);
   }

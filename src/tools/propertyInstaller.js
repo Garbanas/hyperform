@@ -1,4 +1,4 @@
-import { get_wrapper } from '../components/wrapper';
+import { getWrapper } from '../components/wrapper';
 
 
 /**
@@ -7,40 +7,37 @@ import { get_wrapper } from '../components/wrapper';
  * js> installer(element, 'foo', { value: 'bar' });
  * js> assert(element.foo === 'bar');
  */
-export default function(element, property, descriptor) {
+export default function (element, property, descriptor) {
   descriptor.configurable = true;
   descriptor.enumerable = true;
   if ('value' in descriptor) {
     descriptor.writable = true;
   }
 
-  const original_descriptor = Object.getOwnPropertyDescriptor(element, property);
+  const originalDescriptor = Object.getOwnPropertyDescriptor(element, property);
 
-  if (original_descriptor) {
-
-    if (original_descriptor.configurable === false) {
+  if (originalDescriptor) {
+    if (originalDescriptor.configurable === false) {
       /* Safari <= 9 and PhantomJS will end up here :-( Nothing to do except
        * warning */
-      const wrapper = get_wrapper(element);
+      const wrapper = getWrapper(element);
       if (wrapper && wrapper.settings.debug) {
         /* global console */
-        console.log('[hyperform] cannot install custom property '+property);
+        console.log(`[hyperform] cannot install custom property ${property}`);
       }
       return false;
     }
 
     /* we already installed that property... */
-    if ((original_descriptor.get && original_descriptor.get.__hyperform) ||
-        (original_descriptor.value && original_descriptor.value.__hyperform)) {
-      return;
+    if (
+      (originalDescriptor.get && originalDescriptor.get.__hyperform) ||
+      (originalDescriptor.value && originalDescriptor.value.__hyperform)
+    ) {
+      return false;
     }
 
     /* publish existing property under new name, if it's not from us */
-    Object.defineProperty(
-      element,
-      '_original_'+property,
-      original_descriptor
-    );
+    Object.defineProperty(element, `_original_${property}`, originalDescriptor);
   }
 
   delete element[property];

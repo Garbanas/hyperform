@@ -5,7 +5,7 @@
  * js> mark(obj);
  * js> assert(obj.__hyperform === true)
  */
-export default function(obj) {
+export default function (obj) {
   if (['object', 'function'].indexOf(typeof obj) > -1) {
     delete obj.__hyperform;
     Object.defineProperty(obj, '__hyperform', {

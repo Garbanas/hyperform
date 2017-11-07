@@ -1,17 +1,15 @@
-
-
-import is_validation_candidate from '../tools/is_validation_candidate';
+import isValidationCandidate from '../tools/isValidationCandidate';
 import mark from '../tools/mark';
-import message_store from '../components/message_store';
-import { get_wrapper } from '../components/wrapper';
-import validity_state_checkers from '../tools/validity_state_checkers';
+import messageStore from '../components/messageStore';
+import { getWrapper } from '../components/wrapper';
+import validityStateCheckers from '../tools/validityStateCheckers';
 
 
 /**
  * the validity state constructor
  */
-const ValidityState = function(element) {
-  if (! (element instanceof window.HTMLElement)) {
+const ValidityState = function (element) {
+  if (!(element instanceof window.HTMLElement)) {
     throw new Error('cannot create a ValidityState for a non-element');
   }
 
@@ -20,13 +18,14 @@ const ValidityState = function(element) {
     return cached;
   }
 
-  if (! (this instanceof ValidityState)) {
+  if (!(this instanceof ValidityState)) {
     /* working around a forgotten `new` */
     return new ValidityState(element);
   }
 
   this.element = element;
   ValidityState.cache.set(element, this);
+  return this;
 };
 
 
@@ -42,13 +41,13 @@ ValidityState.cache = new WeakMap();
  * copy functionality from the validity checkers to the ValidityState
  * prototype
  */
-for (let prop in validity_state_checkers) {
+for (const prop in validityStateCheckers) {
   Object.defineProperty(ValidityStatePrototype, prop, {
     configurable: true,
     enumerable: true,
-    get: (func => function() {
+    get: (func => function () {
       return func(this.element);
-    })(validity_state_checkers[prop]),
+    })(validityStateCheckers[prop]),
     set: undefined,
   });
 }
@@ -63,21 +62,21 @@ for (let prop in validity_state_checkers) {
 Object.defineProperty(ValidityStatePrototype, 'valid', {
   configurable: true,
   enumerable: true,
-  get: function() {
-    const wrapper = get_wrapper(this.element);
-    const validClass = wrapper && wrapper.settings.classes.valid || 'hf-valid';
-    const invalidClass = wrapper && wrapper.settings.classes.invalid || 'hf-invalid';
-    const userInvalidClass = wrapper && wrapper.settings.classes.userInvalid || 'hf-user-invalid';
-    const userValidClass = wrapper && wrapper.settings.classes.userValid || 'hf-user-valid';
-    const inRangeClass = wrapper && wrapper.settings.classes.inRange || 'hf-in-range';
-    const outOfRangeClass = wrapper && wrapper.settings.classes.outOfRange || 'hf-out-of-range';
-    const validatedClass = wrapper && wrapper.settings.classes.validated || 'hf-validated';
+  get() {
+    const wrapper = getWrapper(this.element);
+    const validClass = (wrapper && wrapper.settings.classes.valid) || 'hf-valid';
+    const invalidClass = (wrapper && wrapper.settings.classes.invalid) || 'hf-invalid';
+    const userInvalidClass = (wrapper && wrapper.settings.classes.userInvalid) || 'hf-user-invalid';
+    const userValidClass = (wrapper && wrapper.settings.classes.userValid) || 'hf-user-valid';
+    const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || 'hf-in-range';
+    const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || 'hf-out-of-range';
+    const validatedClass = (wrapper && wrapper.settings.classes.validated) || 'hf-validated';
 
     this.element.classList.add(validatedClass);
 
-    if (is_validation_candidate(this.element)) {
-      for (let prop in validity_state_checkers) {
-        if (validity_state_checkers[prop](this.element)) {
+    if (isValidationCandidate(this.element)) {
+      for (const prop in validityStateCheckers) {
+        if (validityStateCheckers[prop](this.element)) {
           this.element.classList.add(invalidClass);
           this.element.classList.remove(validClass);
           this.element.classList.remove(userValidClass);
@@ -92,7 +91,7 @@ Object.defineProperty(ValidityStatePrototype, 'valid', {
       }
     }
 
-    message_store.delete(this.element);
+    messageStore.delete(this.element);
     this.element.classList.remove(invalidClass);
     this.element.classList.remove(userInvalidClass);
     this.element.classList.remove(outOfRangeClass);

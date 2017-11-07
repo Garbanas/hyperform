@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
 import pattern from '../../../src/validators/pattern';
 
-test('validator-pattern', t => {
-  var el = document.createElement('input');
+test('validator-pattern', (t) => {
+  const el = document.createElement('input');
   el.setAttribute('pattern', 'a.c');
   el.value = 'xyz';
   t.false(pattern(el));

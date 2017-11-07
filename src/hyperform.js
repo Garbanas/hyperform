@@ -8,9 +8,9 @@ import ValidityState from './polyfills/validityState';
 import valueAsDate from './polyfills/valueAsDate';
 import valueAsNumber from './polyfills/valueAsNumber';
 import willValidate from './polyfills/willValidate';
-import custom_messages from './components/custom_messages';
-import { add_hook, remove_hook } from './components/hooks';
-import { set_language, add_translation } from './components/localization';
+import customMessages from './components/customMessages';
+import { addHook, removeHook } from './components/hooks';
+import { setLanguage, addTranslation } from './components/localization';
 import CustomValidatorRegistry from './components/registry';
 import Renderer from './components/renderer';
 import Wrapper from './components/wrapper';
@@ -22,9 +22,9 @@ import version from './version';
  * TODO: delme before next non-patch release
  */
 function w(name) {
-  const deprecated_message = 'Please use camelCase method names! The name "%s" is deprecated and will be removed in the next non-patch release.';
+  const deprecatedMessage = 'Please use camelCase method names! The name "%s" is deprecated and will be removed in the next non-patch release.';
   /* global console */
-  console.log(sprintf(deprecated_message, name));
+  console.log(sprintf(deprecatedMessage, name));
 }
 
 
@@ -32,27 +32,26 @@ function w(name) {
  * public hyperform interface:
  */
 function hyperform(form, {
-                     classes,
-                     debug=false,
-                     extend_fieldset,
-                     extendFieldset,
-                     novalidate_on_elements,
-                     novalidateOnElements,
-                     prevent_implicit_submit,
-                     preventImplicitSubmit/* TODO: uncomment =false */,
-                     revalidate,
-                     strict=false,
-                     valid_event,
-                     validEvent,
-                   }={}) {
-
-  if (! classes) {
+  classes,
+  debug = false,
+  extend_fieldset,
+  extendFieldset,
+  novalidate_on_elements,
+  novalidateOnElements,
+  prevent_implicit_submit,
+  preventImplicitSubmit/* TODO: uncomment =false */,
+  revalidate,
+  strict = false,
+  valid_event,
+  validEvent,
+} = {}) {
+  if (!classes) {
     classes = {};
   }
   // TODO: clean up before next non-patch release
   if (extendFieldset === undefined) {
     if (extend_fieldset === undefined) {
-      extendFieldset = ! strict;
+      extendFieldset = !strict;
     } else {
       w('extend_fieldset');
       extendFieldset = extend_fieldset;
@@ -60,7 +59,7 @@ function hyperform(form, {
   }
   if (novalidateOnElements === undefined) {
     if (novalidate_on_elements === undefined) {
-      novalidateOnElements = ! strict;
+      novalidateOnElements = !strict;
     } else {
       w('novalidate_on_elements');
       novalidateOnElements = novalidate_on_elements;
@@ -76,26 +75,34 @@ function hyperform(form, {
   }
   if (revalidate === undefined) {
     /* other recognized values: 'oninput', 'onblur', 'onsubmit' and 'never' */
-    revalidate = strict? 'onsubmit' : 'hybrid';
+    revalidate = strict ? 'onsubmit' : 'hybrid';
   }
   if (validEvent === undefined) {
     if (valid_event === undefined) {
-      validEvent = ! strict;
+      validEvent = !strict;
     } else {
       w('valid_event');
       validEvent = valid_event;
     }
   }
 
-  const settings = { debug, strict, preventImplicitSubmit, revalidate,
-                     validEvent, extendFieldset, classes, novalidateOnElements,
-                   };
+  const settings = {
+    debug,
+    strict,
+    preventImplicitSubmit,
+    revalidate,
+    validEvent,
+    extendFieldset,
+    classes,
+    novalidateOnElements,
+  };
 
-  if (form instanceof window.NodeList ||
-      form instanceof window.HTMLCollection ||
-      form instanceof Array) {
-    return Array.prototype.map.call(form,
-                                    element => hyperform(element, settings));
+  if (
+    form instanceof window.NodeList ||
+    form instanceof window.HTMLCollection ||
+    form instanceof Array
+  ) {
+    return Array.prototype.map.call(form, element => hyperform(element, settings));
   }
 
   return new Wrapper(form, settings);
@@ -114,22 +121,22 @@ hyperform.valueAsDate = valueAsDate;
 hyperform.valueAsNumber = valueAsNumber;
 hyperform.willValidate = willValidate;
 
-hyperform.setLanguage = lang => { set_language(lang); return hyperform; };
-hyperform.addTranslation = (lang, catalog) => { add_translation(lang, catalog); return hyperform; };
+hyperform.setLanguage = (lang) => { setLanguage(lang); return hyperform; };
+hyperform.addTranslation = (lang, catalog) => { addTranslation(lang, catalog); return hyperform; };
 hyperform.setRenderer = (renderer, action) => { Renderer.set(renderer, action); return hyperform; };
 hyperform.addValidator = (element, validator) => { CustomValidatorRegistry.set(element, validator); return hyperform; };
-hyperform.setMessage = (element, validator, message) => { custom_messages.set(element, validator, message); return hyperform; };
-hyperform.addHook = (hook, action, position) => { add_hook(hook, action, position); return hyperform; };
-hyperform.removeHook = (hook, action) => { remove_hook(hook, action); return hyperform; };
+hyperform.setMessage = (element, validator, message) => { customMessages.set(element, validator, message); return hyperform; };
+hyperform.addHook = (hook, action, position) => { addHook(hook, action, position); return hyperform; };
+hyperform.removeHook = (hook, action) => { removeHook(hook, action); return hyperform; };
 
 // TODO: Remove in next non-patch version
-hyperform.set_language = lang => { w('set_language'); set_language(lang); return hyperform; };
-hyperform.add_translation = (lang, catalog) => { w('add_translation'); add_translation(lang, catalog); return hyperform; };
+hyperform.set_language = (lang) => { w('set_language'); setLanguage(lang); return hyperform; };
+hyperform.add_translation = (lang, catalog) => { w('add_translation'); addTranslation(lang, catalog); return hyperform; };
 hyperform.set_renderer = (renderer, action) => { w('set_renderer'); Renderer.set(renderer, action); return hyperform; };
 hyperform.add_validator = (element, validator) => { w('add_validator'); CustomValidatorRegistry.set(element, validator); return hyperform; };
-hyperform.set_message = (element, validator, message) => { w('set_message'); custom_messages.set(element, validator, message); return hyperform; };
-hyperform.add_hook = (hook, action, position) => { w('add_hook'); add_hook(hook, action, position); return hyperform; };
-hyperform.remove_hook = (hook, action) => { w('remove_hook'); remove_hook(hook, action); return hyperform; };
+hyperform.set_message = (element, validator, message) => { w('set_message'); customMessages.set(element, validator, message); return hyperform; };
+hyperform.add_hook = (hook, action, position) => { w('add_hook'); addHook(hook, action, position); return hyperform; };
+hyperform.remove_hook = (hook, action) => { w('remove_hook'); removeHook(hook, action); return hyperform; };
 
 if (document.currentScript && document.currentScript.hasAttribute('data-hf-autoload')) {
   hyperform(window);

@@ -1,5 +1,3 @@
-
-
 /**
  * the following validation messages are from Firefox source,
  * http://mxr.mozilla.org/mozilla-central/source/dom/locales/en-US/chrome/dom/dom.properties
@@ -33,52 +31,52 @@ const catalog = {
 /**
  * the global language Hyperform will use
  */
-var language = 'en';
+let language = 'en';
 
 
 /**
  * the base language according to BCP47, i.e., only the piece before the first hyphen
  */
-var base_lang = 'en';
+let baseLanguage = 'en';
 
 
 /**
  * set the language for Hyperform’s messages
  */
-export function set_language(newlang) {
+export function setLanguage(newlang) {
   language = newlang;
-  base_lang = newlang.replace(/[-_].*/, '');
+  baseLanguage = newlang.replace(/[-_].*/, '');
 }
 
 
 /**
  * add a lookup catalog "string: translation" for a language
  */
-export function add_translation(lang, new_catalog) {
-  if (! (lang in catalog)) {
+export function addTranslation(lang, newCatalog) {
+  if (!(lang in catalog)) {
     catalog[lang] = {};
   }
-  for (let key in new_catalog) {
-    if (new_catalog.hasOwnProperty(key)) {
-      catalog[lang][key] = new_catalog[key];
+  for (const key in newCatalog) {
+    if (newCatalog.hasOwnProperty(key)) {
+      catalog[lang][key] = newCatalog[key];
     }
   }
 }
 
 
 /**
- * return `s` translated into the current language
+ * return `key` translated into the current language
  *
  * Defaults to the base language and then English if the former has no
- * translation for `s`.
+ * translation for `key`.
  */
-export default function(s) {
-  if ((language in catalog) && (s in catalog[language])) {
-    return catalog[language][s];
-  } else if ((base_lang in catalog) && (s in catalog[base_lang])) {
-    return catalog[base_lang][s];
-  } else if (s in catalog.en) {
-    return catalog.en[s];
+export default function (key) {
+  if ((language in catalog) && (key in catalog[language])) {
+    return catalog[language][key];
+  } else if ((baseLanguage in catalog) && (key in catalog[baseLanguage])) {
+    return catalog[baseLanguage][key];
+  } else if (key in catalog.en) {
+    return catalog.en[key];
   }
-  return s;
+  return key;
 }

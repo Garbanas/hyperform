@@ -1,6 +1,4 @@
-
-
-import message_store from '../components/message_store';
+import messageStore from '../components/messageStore';
 
 
 /**
@@ -8,8 +6,8 @@ import message_store from '../components/message_store';
  * satisfies all constraints.
  */
 export default function validationMessage(element) {
-  const msg = message_store.get(element);
-  if (! msg) {
+  const msg = messageStore.get(element);
+  if (!msg) {
     return '';
   }
 

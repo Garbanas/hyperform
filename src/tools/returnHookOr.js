@@ -1,4 +1,4 @@
-import { call_hook } from '../components/hooks.js';
+import { callHook } from '../components/hooks';
 
 
 /**
@@ -7,9 +7,9 @@ import { call_hook } from '../components/hooks.js';
  *
  * @return function a function wrapper around action
  */
-export default function(hook, action) {
-  return function() {
-    const data = call_hook(hook, Array.prototype.slice.call(arguments));
+export default function (hook, action) {
+  return function () {
+    const data = callHook(hook, Array.prototype.slice.call(arguments));
 
     if (data !== undefined) {
       return data;

@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
 import step from '../../../src/validators/step';
 
-test('validator-step', t => {
-  var el = document.createElement('input');
+test('validator-step', (t) => {
+  const el = document.createElement('input');
   el.type = 'number';
   el.setAttribute('step', '10');
   el.value = '';
@@ -23,8 +21,8 @@ test('validator-step', t => {
   t.is(step(el), true);
 });
 
-test('validator-step for month', t => {
-  var el = document.createElement('input');
+test('validator-step for month', (t) => {
+  const el = document.createElement('input');
   el.type = 'month';
   el.setAttribute('step', '2');
   el.setAttribute('min', '2015-01');

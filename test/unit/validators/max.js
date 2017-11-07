@@ -1,10 +1,8 @@
-'use strict';
-
 import test from 'ava';
 import max from '../../../src/validators/max';
 
-test('validator-max', t => {
-  var el = document.createElement('input');
+test('validator-max', (t) => {
+  const el = document.createElement('input');
   el.type = 'number';
   el.setAttribute('max', '10');
   el.value = '';
@@ -21,8 +19,8 @@ test('validator-max', t => {
   t.is(max(el), false);
 });
 
-test('validator-max for date', t => {
-  var el = document.createElement('input');
+test('validator-max for date', (t) => {
+  const el = document.createElement('input');
   el.type = 'date';
   el.setAttribute('max', '2015-01-01');
   el.value = '';

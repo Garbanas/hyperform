@@ -1,11 +1,9 @@
-'use strict';
-
 import test from 'ava';
 import valueAsNumber from '../../../src/polyfills/valueAsNumber';
 
 function get(attributes) {
-  var el = document.createElement('input');
-  for (let key in attributes) {
+  const el = document.createElement('input');
+  for (const key in attributes) {
     el.setAttribute(key, attributes[key]);
     if (key === 'value') {
       el[key] = attributes[key];
@@ -14,15 +12,15 @@ function get(attributes) {
   return el;
 }
 
-test('valueAsNumber getter (number)', t => {
+test('valueAsNumber getter (number)', (t) => {
   t.is(valueAsNumber(get({
     type: 'number',
     value: '1',
   })), 1);
 });
 
-test('valueAsNumber setter (number)', t => {
-  let el = get({
+test('valueAsNumber setter (number)', (t) => {
+  const el = get({
     type: 'number',
     value: '',
   });
@@ -30,15 +28,15 @@ test('valueAsNumber setter (number)', t => {
   t.is(valueAsNumber(el), 1);
 });
 
-test('valueAsNumber getter (month)', t => {
+test('valueAsNumber getter (month)', (t) => {
   t.is(valueAsNumber(get({
     type: 'month',
     value: '2015-01',
   })), +(new Date(Date.UTC(2015, 0, 1))));
 });
 
-test('valueAsNumber setter (month)', t => {
-  let el = get({
+test('valueAsNumber setter (month)', (t) => {
+  const el = get({
     type: 'month',
     value: '',
   });
@@ -46,21 +44,21 @@ test('valueAsNumber setter (month)', t => {
   t.is(valueAsNumber(el), +(new Date(Date.UTC(2015, 0, 1))));
 });
 
-test('valueAsNumber setter with wrong type', t => {
+test('valueAsNumber setter with wrong type', (t) => {
   t.throws(() => valueAsNumber(get({
     type: 'number',
     value: '',
   }), '1'), window.DOMException);
 });
 
-test('valueAsNumber getter for non-applicable type', t => {
-  t.true(isNaN(valueAsNumber(get({
+test('valueAsNumber getter for non-applicable type', (t) => {
+  t.true(Number.isNaN(valueAsNumber(get({
     type: 'text',
     value: '1',
   }))));
 });
 
-test('valueAsNumber setter for non-applicable type', t => {
+test('valueAsNumber setter for non-applicable type', (t) => {
   t.throws(() => valueAsNumber(get({
     type: 'text',
     value: '',

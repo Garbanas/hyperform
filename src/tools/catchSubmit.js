@@ -1,10 +1,46 @@
-
-
-import trigger_event, { create_event } from './trigger_event';
+import triggerEvent, { createEvent } from './triggerEvent';
 import matches from './matches';
 import reportValidity from '../polyfills/reportValidity';
-import { text as text_types } from '../components/types';
-import { get_wrapper } from '../components/wrapper';
+import { text as textTypes } from '../components/types';
+import { getWrapper } from '../components/wrapper';
+
+
+/**
+ * if a submit button was clicked, add its name=value by means of a type=hidden
+ * input field
+ */
+function addSubmitField(button) {
+  if (['image', 'submit'].indexOf(button.type) > -1 && button.name) {
+    const wrapper = getWrapper(button.form) || {};
+    let submitHelper = wrapper.submit_helper;
+    if (submitHelper) {
+      if (submitHelper.parentNode) {
+        submitHelper.parentNode.removeChild(submitHelper);
+      }
+    } else {
+      submitHelper = document.createElement('input');
+      submitHelper.type = 'hidden';
+      wrapper.submit_helper = submitHelper;
+    }
+    submitHelper.name = button.name;
+    submitHelper.value = button.value;
+    button.form.appendChild(submitHelper);
+  }
+}
+
+
+/**
+ * remove a possible helper input, that was added by `addSubmitField`
+ */
+function removeSubmitField(button) {
+  if (['image', 'submit'].indexOf(button.type) > -1 && button.name) {
+    const wrapper = getWrapper(button.form) || {};
+    const submitHelper = wrapper.submit_helper;
+    if (submitHelper && submitHelper.parentNode) {
+      submitHelper.parentNode.removeChild(submitHelper);
+    }
+  }
+}
 
 
 /**
@@ -16,7 +52,7 @@ import { get_wrapper } from '../components/wrapper';
  * If the element is a button with a name, the name=value pair will be added
  * to the submitted data.
  */
-function submit_form_via(element) {
+function submitFormVia(element) {
   /* apparently, the submit event is not triggered in most browsers on
    * the submit() method, so we do it manually here to model a natural
    * submit as closely as possible.
@@ -26,63 +62,29 @@ function submit_form_via(element) {
    * 2) nothing.
    * And as you already suspected, the correct answer is: both! Firefox
    * opts for 1), Chrome for 2). Yay! */
-  var event_got_cancelled;
+  let eventGotCancelled;
 
-  var submit_event = create_event('submit', { cancelable: true });
+  const submitEvent = createEvent('submit', { cancelable: true });
   /* force Firefox to not submit the form, then fake preventDefault() */
-  submit_event.preventDefault();
-  Object.defineProperty(submit_event, 'defaultPrevented', {
+  submitEvent.preventDefault();
+  Object.defineProperty(submitEvent, 'defaultPrevented', {
     value: false,
     writable: true,
   });
-  Object.defineProperty(submit_event, 'preventDefault', {
-    value: () => submit_event.defaultPrevented = event_got_cancelled = true,
+  Object.defineProperty(submitEvent, 'preventDefault', {
+    value: () => {
+      submitEvent.defaultPrevented = true;
+      eventGotCancelled = true;
+      return true;
+    },
     writable: true,
   });
-  trigger_event(element.form, submit_event, {}, { submittedVia: element });
+  triggerEvent(element.form, submitEvent, {}, { submittedVia: element });
 
-  if (! event_got_cancelled) {
-    add_submit_field(element);
+  if (!eventGotCancelled) {
+    addSubmitField(element);
     window.HTMLFormElement.prototype.submit.call(element.form);
-    window.setTimeout(() => remove_submit_field(element));
-  }
-}
-
-
-/**
- * if a submit button was clicked, add its name=value by means of a type=hidden
- * input field
- */
-function add_submit_field(button) {
-  if (['image', 'submit'].indexOf(button.type) > -1 && button.name) {
-    const wrapper = get_wrapper(button.form) || {};
-    var submit_helper = wrapper.submit_helper;
-    if (submit_helper) {
-      if (submit_helper.parentNode) {
-        submit_helper.parentNode.removeChild(submit_helper);
-      }
-    } else {
-      submit_helper = document.createElement('input');
-      submit_helper.type = 'hidden';
-      wrapper.submit_helper = submit_helper;
-    }
-    submit_helper.name = button.name;
-    submit_helper.value = button.value;
-    button.form.appendChild(submit_helper);
-  }
-}
-
-
-/**
- * remove a possible helper input, that was added by `add_submit_field`
- */
-function remove_submit_field(button) {
-  if (['image', 'submit'].indexOf(button.type) > -1 && button.name) {
-    const wrapper = get_wrapper(button.form) || {};
-    const submit_helper = wrapper.submit_helper;
-    if (submit_helper && submit_helper.parentNode) {
-      submit_helper.parentNode.removeChild(submit_helper);
-    }
+    window.setTimeout(() => removeSubmitField(element));
   }
 }
 
@@ -97,32 +99,31 @@ function remove_submit_field(button) {
  */
 function check(button) {
   /* trigger a "validate" event on the form to be submitted */
-  const val_event = trigger_event(button.form, 'validate',
-                                  { cancelable: true });
-  if (val_event.defaultPrevented) {
+  const valEvent = triggerEvent(button.form, 'validate', { cancelable: true });
+  if (valEvent.defaultPrevented) {
     /* skip the whole submit thing, if the validation is canceled. A user
      * can still call form.submit() afterwards. */
     return;
   }
 
-  var valid = true;
-  var first_invalid;
-  Array.prototype.map.call(button.form.elements, element => {
-    if (! reportValidity(element)) {
+  let valid = true;
+  let firstInvalid;
+  Array.prototype.map.call(button.form.elements, (element) => {
+    if (!reportValidity(element)) {
       valid = false;
-      if (! first_invalid && ('focus' in element)) {
-        first_invalid = element;
+      if (!firstInvalid && ('focus' in element)) {
+        firstInvalid = element;
       }
     }
   });
 
   if (valid) {
-    submit_form_via(button);
-  } else if (first_invalid) {
+    submitFormVia(button);
+  } else if (firstInvalid) {
     /* focus the first invalid element, if validation went south */
-    first_invalid.focus();
+    firstInvalid.focus();
     /* tell the tale, if anyone wants to react to it */
-    trigger_event(button.form, 'forminvalid');
+    triggerEvent(button.form, 'forminvalid');
   }
 }
 
@@ -130,7 +131,7 @@ function check(button) {
 /**
  * test if node is a submit button
  */
-function is_submit_button(node) {
+function isSubmitButton(node) {
   return (
     /* must be an input or button element... */
     (node.nodeName === 'INPUT' ||
@@ -145,23 +146,23 @@ function is_submit_button(node) {
 /**
  * test, if the click event would trigger a submit
  */
-function is_submitting_click(event, button) {
+function isSubmittingClick(event, button) {
   return (
     /* prevented default: won't trigger a submit */
-    ! event.defaultPrevented &&
+    !event.defaultPrevented &&
 
     /* left button or middle button (submits in Chrome) */
-    (! ('button' in event) ||
+    (!('button' in event) ||
      event.button < 2) &&
 
     /* must be a submit button... */
-    is_submit_button(button) &&
+    isSubmitButton(button) &&
 
     /* the button needs a form, that's going to be submitted */
     button.form &&
 
     /* again, if the form should not be validated, we're out of the game */
-    ! button.form.hasAttribute('novalidate')
+    !button.form.hasAttribute('novalidate')
   );
 }
 
@@ -169,10 +170,10 @@ function is_submitting_click(event, button) {
 /**
  * test, if the keypress event would trigger a submit
  */
-function is_submitting_keypress(event) {
+function isSubmittingKeypress(event) {
   return (
     /* prevented default: won't trigger a submit */
-    ! event.defaultPrevented &&
+    !event.defaultPrevented &&
 
     (
       (
@@ -183,14 +184,14 @@ function is_submitting_keypress(event) {
         event.target.nodeName === 'INPUT' &&
 
         /* ...a standard text input field (not checkbox, ...) */
-        text_types.indexOf(event.target.type) > -1
+        textTypes.indexOf(event.target.type) > -1
       ) || (
         /* or <Enter> or <Space> was pressed... */
         (event.keyCode === 13 ||
          event.keyCode === 32) &&
 
         /* ...on a submit button */
-        is_submit_button(event.target)
+        isSubmitButton(event.target)
       )
     ) &&
 
@@ -198,7 +199,7 @@ function is_submitting_keypress(event) {
     event.target.form &&
 
     /* ...and the form allows validation */
-    ! event.target.form.hasAttribute('novalidate')
+    !event.target.form.hasAttribute('novalidate')
   );
 }
 
@@ -206,47 +207,46 @@ function is_submitting_keypress(event) {
 /**
  * catch clicks to children of <button>s
  */
-function get_clicked_button(element) {
-  if (is_submit_button(element)) {
+function getClickedButton(element) {
+  if (isSubmitButton(element)) {
     return element;
   } else if (matches(element, 'button:not([type]) *, button[type="submit"] *')) {
-    return get_clicked_button(element.parentNode);
-  } else {
-    return null;
+    return getClickedButton(element.parentNode);
   }
+  return null;
 }
 
 
 /**
  * return event handler to catch explicit submission by click on a button
  */
-function get_click_handler(ignore=false) {
-  return function(event) {
-    const button = get_clicked_button(event.target);
-    if (button && is_submitting_click(event, button)) {
+function getClickHandler(ignore = false) {
+  return function (event) {
+    const button = getClickedButton(event.target);
+    if (button && isSubmittingClick(event, button)) {
       event.preventDefault();
       if (ignore || button.hasAttribute('formnovalidate')) {
         /* if validation should be ignored, we're not interested in any checks */
-        submit_form_via(button);
+        submitFormVia(button);
       } else {
         check(button);
       }
     }
   };
 }
-const click_handler = get_click_handler();
-const ignored_click_handler = get_click_handler(true);
+const clickHandler = getClickHandler();
+const ignoredClickHandler = getClickHandler(true);
 
 
 /**
  * catch implicit submission by pressing <Enter> in some situations
  */
-function get_keypress_handler(ignore) {
-  return function keypress_handler(event) {
-    if (is_submitting_keypress(event))  {
+function getKeypressHandler(ignore) {
+  return function keypressHandler(event) {
+    if (isSubmittingKeypress(event)) {
       event.preventDefault();
 
-      const wrapper = get_wrapper(event.target.form) || { settings: {} };
+      const wrapper = getWrapper(event.target.form) || { settings: {} };
       if (wrapper.settings.preventImplicitSubmit) {
         /* user doesn't want an implicit submit. Cancel here. */
         return;
@@ -255,7 +255,7 @@ function get_keypress_handler(ignore) {
       /* check, that there is no submit button in the form. Otherwise
       * that should be clicked. */
       const el = event.target.form.elements.length;
-      var submit;
+      let submit;
       for (let i = 0; i < el; i++) {
         if (['image', 'submit'].indexOf(event.target.form.elements[i].type) > -1) {
           submit = event.target.form.elements[i];
@@ -266,41 +266,42 @@ function get_keypress_handler(ignore) {
       if (submit) {
         submit.click();
       } else if (ignore) {
-        submit_form_via(event.target);
+        submitFormVia(event.target);
       } else {
         check(event.target);
       }
     }
   };
 }
-const keypress_handler = get_keypress_handler();
-const ignored_keypress_handler = get_keypress_handler(true);
+const keypressHandler = getKeypressHandler();
+const ignoredKeypressHandler = getKeypressHandler(true);
 
 
 /**
  * catch all relevant events _prior_ to a form being submitted
  *
- * @param bool ignore bypass validation, when an attempt to submit the
+ * @param {Element} listeningNode
+ * @param {Boolean} ignore - bypass validation, when an attempt to submit the
  *                    form is detected. True, when the wrapper's revalidate
  *                    setting is 'never'.
  */
-export function catch_submit(listening_node, ignore=false) {
+export function catchSubmit(listeningNode, ignore = false) {
   if (ignore) {
-    listening_node.addEventListener('click', ignored_click_handler);
-    listening_node.addEventListener('keypress', ignored_keypress_handler);
+    listeningNode.addEventListener('click', ignoredClickHandler);
+    listeningNode.addEventListener('keypress', ignoredKeypressHandler);
   } else {
-    listening_node.addEventListener('click', click_handler);
-    listening_node.addEventListener('keypress', keypress_handler);
+    listeningNode.addEventListener('click', clickHandler);
+    listeningNode.addEventListener('keypress', keypressHandler);
   }
 }
 
 
 /**
- * decommission the event listeners from catch_submit() again
+ * decommission the event listeners from catchSubmit() again
  */
-export function uncatch_submit(listening_node) {
-  listening_node.removeEventListener('click', ignored_click_handler);
-  listening_node.removeEventListener('keypress', ignored_keypress_handler);
-  listening_node.removeEventListener('click', click_handler);
-  listening_node.removeEventListener('keypress', keypress_handler);
+export function uncatchSubmit(listeningNode) {
+  listeningNode.removeEventListener('click', ignoredClickHandler);
+  listeningNode.removeEventListener('keypress', ignoredKeypressHandler);
+  listeningNode.removeEventListener('click', clickHandler);
+  listeningNode.removeEventListener('keypress', keypressHandler);
 }

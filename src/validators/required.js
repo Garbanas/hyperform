@@ -1,13 +1,14 @@
-import is_validation_candidate from '../tools/is_validation_candidate';
+import isValidationCandidate from '../tools/isValidationCandidate';
 
 
 /**
  * test the required attribute
  */
-export default function(element) {
-  if (! is_validation_candidate(element)
-      ||
-      ! element.hasAttribute('required')) {
+export default function (element) {
+  if (
+    !isValidationCandidate(element) ||
+    !element.hasAttribute('required')
+  ) {
     /* nothing to do */
     return true;
   }
@@ -17,11 +18,10 @@ export default function(element) {
   switch (element.type) {
     case 'checkbox':
       return element.checked;
-      //break;
     case 'radio':
       /* radio inputs have "required" fulfilled, if _any_ other radio
        * with the same name in this form is checked. */
-      return !! (
+      return !!(
         element.checked ||
         (
           element.form &&
@@ -29,12 +29,11 @@ export default function(element) {
             document.getElementsByName(element.name),
             radio => radio.name === element.name &&
                      radio.form === element.form &&
-                     radio.checked
+                     radio.checked,
           ).length > 0
         )
       );
-      //break;
     default:
-      return !! element.value;
+      return !!element.value;
   }
 }

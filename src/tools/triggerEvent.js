@@ -4,16 +4,16 @@
  */
 // defaultPrevented is broken in IE.
 // https://connect.microsoft.com/IE/feedback/details/790389/event-defaultprevented-returns-false-after-preventdefault-was-called
-const workingDefaultPrevented = (function() {
+const workingDefaultPrevented = (function () {
   const e = document.createEvent('Event');
   e.initEvent('foo', true, true);
   e.preventDefault();
   return e.defaultPrevented;
-})();
+}());
 
 if (!workingDefaultPrevented) {
   const origPreventDefault = window.Event.prototype.preventDefault;
-  window.Event.prototype.preventDefault = function() {
+  window.Event.prototype.preventDefault = function () {
     if (!this.cancelable) {
       return;
     }
@@ -21,32 +21,32 @@ if (!workingDefaultPrevented) {
     origPreventDefault.call(this);
 
     Object.defineProperty(this, 'defaultPrevented', {
-      get: function() {
+      get() {
         return true;
       },
-      configurable: true
+      configurable: true,
     });
   };
 }
 /* end of borrowed code */
 
 
-export function create_event(name, { bubbles=true, cancelable=false, }={}) {
+export function createEvent(name, { bubbles = true, cancelable = false } = {}) {
   const event = document.createEvent('Event');
   event.initEvent(name, bubbles, cancelable);
   return event;
 }
 
 
-export default function(element, event, {
-                          bubbles=true,
-                          cancelable=false,
-                        }={}, payload={}) {
-  if (! (event instanceof window.Event)) {
-    event = create_event(event, { bubbles, cancelable });
+export default function (element, event, {
+  bubbles = true,
+  cancelable = false,
+} = {}, payload = {}) {
+  if (!(event instanceof window.Event)) {
+    event = createEvent(event, { bubbles, cancelable });
   }
 
-  for (let key in payload) {
+  for (const key in payload) {
     if (payload.hasOwnProperty(key)) {
       event[key] = payload[key];
     }

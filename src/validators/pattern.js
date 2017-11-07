@@ -1,17 +1,14 @@
-import is_validation_candidate from '../tools/is_validation_candidate';
+import isValidationCandidate from '../tools/isValidationCandidate';
 
 
 /**
  * test the pattern attribute
  */
-export default function(element) {
+export default function (element) {
   return (
-      ! is_validation_candidate(element)
-      ||
-      ! element.value
-      ||
-      ! element.hasAttribute('pattern')
-      ||
-      (new RegExp('^(?:'+ element.getAttribute('pattern') +')$')).test(element.value)
-    );
+    !isValidationCandidate(element) ||
+    !element.value ||
+    !element.hasAttribute('pattern') ||
+    (new RegExp(`^(?:${element.getAttribute('pattern')})$`)).test(element.value)
+  );
 }

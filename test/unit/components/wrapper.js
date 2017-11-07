@@ -1,15 +1,13 @@
-'use strict';
-
 import test from 'ava';
 import Wrapper from '../../../src/components/wrapper';
 
-test('wrapper', t => {
-  var form = document.createElement('form');
-  var input = document.createElement('input');
+test('wrapper', (t) => {
+  const form = document.createElement('form');
+  const input = document.createElement('input');
   input.type = 'submit';
   form.appendChild(input);
 
-  var wr = new Wrapper(form, {
+  const wr = new Wrapper(form, {
     revalidate: 'oninput',
   });
 
