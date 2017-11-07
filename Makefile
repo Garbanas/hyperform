@@ -4,8 +4,8 @@ JSPM_ARGS := --format global --global-name hyperform --skip-source-maps
 UGLIFYJS := node_modules/.bin/uglifyjs
 UGLIFYJS_ARGS := --mangle --compress
 
-JSHINT := node_modules/.bin/jshint
-JSHINT_ARGS :=
+ESLINT := node_modules/.bin/eslint
+ESLINT_ARGS :=
 
 BANNER := /*! hyperform.js.org */
 
@@ -49,7 +49,7 @@ test: test-syntax test-unit test-functional
 
 test-syntax:
 	@echo "* run syntax tests"
-	@$(JSHINT) $(JSHINT_ARGS) src
+	@$(ESLINT) $(ESLINT_ARGS) src
 .PHONY: test-syntax
 
 test-unit:

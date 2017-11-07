@@ -1,3 +1,4 @@
+/* eslint-disable no-new-wrappers */
 import { getWrapper } from './wrapper';
 import mark from '../tools/mark';
 
@@ -8,7 +9,6 @@ import mark from '../tools/mark';
 const store = new WeakMap();
 
 
-/* jshint -W053 */
 const messageStore = {
 
   set(element, message, isCustom = false) {
@@ -56,6 +56,5 @@ const messageStore = {
   },
 
 };
-/* jshint +W053 */
 
 export default messageStore;

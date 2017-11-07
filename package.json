@@ -7,7 +7,7 @@
   "module": "src/hyperform.js",
   "style": "css/hyperform.css",
   "scripts": {
-    "test": "jshint src && ava",
+    "test": "eslint src && ava",
     "preversion": "npm test",
     "version": "make version VERSION=$npm_package_version && make all && git add src/version.js dist/ bower.json",
     "postversion": "git push && git push --tags"
@@ -43,7 +43,6 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
     "jsdom": "^9.10.0",
-    "jshint": "^2.9.1",
     "jspm": "0.17.0-beta.13",
     "karma": "^1.4.1",
     "karma-chrome-launcher": "^2.0.0",
@@ -60,15 +59,6 @@
     "dist",
     "src"
   ],
-  "jshintConfig": {
-    "esversion": 6,
-    "strict": "global",
-    "laxbreak": true,
-    "globals": {
-      "window": true,
-      "document": true
-    }
-  },
   "ava": {
     "require": [
       "babel-register",
