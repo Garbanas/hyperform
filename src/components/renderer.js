@@ -1,6 +1,7 @@
 import messageStore from './messageStore';
 import { getWrapper } from './wrapper';
 import generateId from '../tools/generateId';
+import { CLASS_WARNING } from '../constants/Classes';
 
 
 const warningsCache = new WeakMap();
@@ -37,7 +38,7 @@ const DefaultRenderer = {
       if (!warning) {
         const wrapper = getWrapper(element);
         warning = document.createElement('div');
-        warning.className = (wrapper && wrapper.settings.classes.warning) || 'hf-warning';
+        warning.className = (wrapper && wrapper.settings.classes.warning) || CLASS_WARNING;
         warning.id = generateId();
         warning.setAttribute('aria-live', 'polite');
         warningsCache.set(element, warning);

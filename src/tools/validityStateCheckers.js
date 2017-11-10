@@ -27,6 +27,7 @@ import testPattern from '../validators/pattern';
 import testRequired from '../validators/required';
 import testStep from '../validators/step';
 import testType from '../validators/type';
+import {CLASS_IN_RANGE, CLASS_OUT_OF_RANGE} from "../constants/Classes";
 
 
 /**
@@ -102,8 +103,8 @@ const patternMismatch = check(testPattern, (element) => {
 const rangeOverflow = check(testMax, (element) => {
   const type = getType(element);
   const wrapper = getWrapper(element);
-  const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || 'hf-out-of-range';
-  const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || 'hf-in-range';
+  const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || CLASS_OUT_OF_RANGE;
+  const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || CLASS_IN_RANGE;
 
   let msg;
 
@@ -131,8 +132,8 @@ const rangeOverflow = check(testMax, (element) => {
 const rangeUnderflow = check(testMin, (element) => {
   const type = getType(element);
   const wrapper = getWrapper(element);
-  const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || 'hf-out-of-range';
-  const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || 'hf-in-range';
+  const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || CLASS_OUT_OF_RANGE;
+  const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || CLASS_IN_RANGE;
 
   let msg;
 

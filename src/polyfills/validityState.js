@@ -3,6 +3,10 @@ import mark from '../tools/mark';
 import messageStore from '../components/messageStore';
 import { getWrapper } from '../components/wrapper';
 import validityStateCheckers from '../tools/validityStateCheckers';
+import {
+  CLASS_IN_RANGE, CLASS_INVALID, CLASS_OUT_OF_RANGE, CLASS_USER_INVALID, CLASS_USER_VALID,
+  CLASS_VALID, CLASS_VALIDATED
+} from "../constants/Classes";
 
 
 /**
@@ -64,13 +68,13 @@ Object.defineProperty(ValidityStatePrototype, 'valid', {
   enumerable: true,
   get() {
     const wrapper = getWrapper(this.element);
-    const validClass = (wrapper && wrapper.settings.classes.valid) || 'hf-valid';
-    const invalidClass = (wrapper && wrapper.settings.classes.invalid) || 'hf-invalid';
-    const userInvalidClass = (wrapper && wrapper.settings.classes.userInvalid) || 'hf-user-invalid';
-    const userValidClass = (wrapper && wrapper.settings.classes.userValid) || 'hf-user-valid';
-    const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || 'hf-in-range';
-    const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || 'hf-out-of-range';
-    const validatedClass = (wrapper && wrapper.settings.classes.validated) || 'hf-validated';
+    const validClass = (wrapper && wrapper.settings.classes.valid) || CLASS_VALID;
+    const invalidClass = (wrapper && wrapper.settings.classes.invalid) || CLASS_INVALID;
+    const userInvalidClass = (wrapper && wrapper.settings.classes.userInvalid) || CLASS_USER_INVALID;
+    const userValidClass = (wrapper && wrapper.settings.classes.userValid) || CLASS_USER_VALID;
+    const inRangeClass = (wrapper && wrapper.settings.classes.inRange) || CLASS_IN_RANGE;
+    const outOfRangeClass = (wrapper && wrapper.settings.classes.outOfRange) || CLASS_OUT_OF_RANGE;
+    const validatedClass = (wrapper && wrapper.settings.classes.validated) || CLASS_VALIDATED;
 
     this.element.classList.add(validatedClass);
 
