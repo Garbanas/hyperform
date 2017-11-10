@@ -4,9 +4,14 @@ import messageStore from '../components/messageStore';
 import { getWrapper } from '../components/wrapper';
 import validityStateCheckers from '../tools/validityStateCheckers';
 import {
-  CLASS_IN_RANGE, CLASS_INVALID, CLASS_OUT_OF_RANGE, CLASS_USER_INVALID, CLASS_USER_VALID,
-  CLASS_VALID, CLASS_VALIDATED
-} from "../constants/Classes";
+  CLASS_VALID,
+  CLASS_INVALID,
+  CLASS_USER_VALID,
+  CLASS_USER_INVALID,
+  CLASS_IN_RANGE,
+  CLASS_OUT_OF_RANGE,
+  CLASS_VALIDATED,
+} from '../constants/Classes';
 
 
 /**

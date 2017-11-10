@@ -27,7 +27,7 @@ import testPattern from '../validators/pattern';
 import testRequired from '../validators/required';
 import testStep from '../validators/step';
 import testType from '../validators/type';
-import {CLASS_IN_RANGE, CLASS_OUT_OF_RANGE} from "../constants/Classes";
+import { CLASS_IN_RANGE, CLASS_OUT_OF_RANGE } from '../constants/Classes';
 
 
 /**
